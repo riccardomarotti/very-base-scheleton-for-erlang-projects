@@ -10,4 +10,4 @@
 
 ## my_modules.erl
 
- Function my_modules:reload/0 will update every module loaded in the REPL.
+ Function <code>my_modules:reload/0</code> will update every module loaded in the REPL.
