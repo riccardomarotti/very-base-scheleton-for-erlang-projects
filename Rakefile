@@ -21,9 +21,9 @@ rule /ebin\/.*\.beam$/ => '%{ebin,src}X.erl' do |t|
   sh "erlc -o ebin #{t.source}"
 end
 
-
 task :default => [:compile]
 
+desc 'Update loaded module: to use in the repl, to reload recompiled modules.'
 task :update_modules_list do
 	MODULES = SRC.collect { |file| File.basename(file).ext('') }
 	File.open('modules', 'w') do |file|
@@ -38,8 +38,10 @@ task :update_modules_list do
 end
 
 
+desc 'Compiles project'
 task :compile => [:update_modules_list, 'ebin'] + BEAMS
 
+desc 'Lanches tests'
 task :test => ['tests/ebin', :compile] + TESTS_BEAMS do
 	test_command = "erl -pa ./tests/ebin ./ebin -noshell"
 	TESTS_NAMES.each do |mod|
@@ -57,6 +59,8 @@ end
 task :run => :compile do
 #    sh "erl -noshell -s module function 25"
 end
+
+desc 'opens Erlang\'s REPL, after compiling'
 task :shell => :compile do
 	sh 'erl -pa ebin'
 end
